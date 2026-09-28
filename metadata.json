@@ -1,0 +1,6 @@
+{
+  "name": "CareConnect Clinic Portal",
+  "description": "HIPAA-compliant clinic platform featuring secure patient records, appointment scheduling, real-time doctor availability and status dashboards, and end-to-end encrypted clinical messaging.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

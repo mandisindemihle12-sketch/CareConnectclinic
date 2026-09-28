@@ -49,11 +49,18 @@ import com.google.android.material.button.MaterialButton;
 import java.util.Random;
 
 public class AuthActivity extends AppCompatActivity {
-    private boolean isRegisterMode = false;
-    private MaterialButton btnTabSignIn, btnTabRegister, btnSubmitAuth;
+    public enum AuthMode {
+        PATIENT_SIGN_IN,
+        DOCTOR_SIGN_IN,
+        PATIENT_REGISTER
+    }
+
+    private AuthMode currentMode = AuthMode.PATIENT_SIGN_IN;
+    private MaterialButton btnTabSignIn, btnTabDoctor, btnTabRegister, btnSubmitAuth;
     private MaterialButton btnDemoPatient, btnDemoDoctor, btnDemoAdmin;
-    private LinearLayout layoutRegisterFields;
-    private EditText etEmail, etPassword, etFirstName, etLastName, etDob, etBloodType, etPhone;
+    private LinearLayout layoutDoctorFields, layoutRegisterFields;
+    private EditText etEmail, etPassword, etDoctorNpi, etDoctorDept;
+    private EditText etFirstName, etLastName, etDob, etBloodType, etPhone;
     private CheckBox cbHipaaConsent;
 
     @Override
@@ -62,84 +69,95 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
         initViews();
         setupListeners();
+        setAuthMode(AuthMode.PATIENT_SIGN_IN);
     }
 
     private void initViews() {
         btnTabSignIn = findViewById(R.id.btn_tab_signin);
+        btnTabDoctor = findViewById(R.id.btn_tab_doctor);
         btnTabRegister = findViewById(R.id.btn_tab_register);
         btnSubmitAuth = findViewById(R.id.btn_submit_auth);
         btnDemoPatient = findViewById(R.id.btn_demo_patient);
         btnDemoDoctor = findViewById(R.id.btn_demo_doctor);
         btnDemoAdmin = findViewById(R.id.btn_demo_admin);
+        layoutDoctorFields = findViewById(R.id.layout_doctor_fields);
         layoutRegisterFields = findViewById(R.id.layout_register_fields);
 
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        etDoctorNpi = findViewById(R.id.et_doctor_npi);
+        etDoctorDept = findViewById(R.id.et_doctor_dept);
         etFirstName = findViewById(R.id.et_first_name);
         etLastName = findViewById(R.id.et_last_name);
         etDob = findViewById(R.id.et_dob);
         etBloodType = findViewById(R.id.et_blood_type);
         etPhone = findViewById(R.id.et_phone);
         cbHipaaConsent = findViewById(R.id.cb_hipaa_consent);
-
-        etEmail.setText("maya.lin@patient.careconnect.health");
-        etPassword.setText("••••••••••••");
     }
 
     private void setupListeners() {
-        btnTabSignIn.setOnClickListener(v -> setMode(false));
-        btnTabRegister.setOnClickListener(v -> setMode(true));
+        btnTabSignIn.setOnClickListener(v -> setAuthMode(AuthMode.PATIENT_SIGN_IN));
+        btnTabDoctor.setOnClickListener(v -> setAuthMode(AuthMode.DOCTOR_SIGN_IN));
+        btnTabRegister.setOnClickListener(v -> setAuthMode(AuthMode.PATIENT_REGISTER));
 
         btnSubmitAuth.setOnClickListener(v -> {
             if (!cbHipaaConsent.isChecked()) {
                 Toast.makeText(this, "HIPAA consent is mandatory to proceed.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (isRegisterMode) {
-                handleRegistration();
-            } else {
-                handleSignIn();
-            }
+            if (currentMode == AuthMode.PATIENT_REGISTER) handleRegistration();
+            else if (currentMode == AuthMode.DOCTOR_SIGN_IN) handleDoctorSignIn();
+            else handlePatientSignIn();
         });
 
         btnDemoPatient.setOnClickListener(v -> loginWithUser(ClinicRepository.getInstance().getDemoUsers().get(0)));
-        btnDemoDoctor.setOnClickListener(v -> loginWithUser(ClinicRepository.getInstance().getDemoUsers().get(1)));
+        btnDemoDoctor.setOnClickListener(v -> {
+            setAuthMode(AuthMode.DOCTOR_SIGN_IN);
+            loginWithUser(ClinicRepository.getInstance().getDemoUsers().get(1));
+        });
         btnDemoAdmin.setOnClickListener(v -> loginWithUser(ClinicRepository.getInstance().getDemoUsers().get(3)));
     }
 
-    private void setMode(boolean register) {
-        isRegisterMode = register;
-        if (register) {
+    private void setAuthMode(AuthMode mode) {
+        currentMode = mode;
+        btnTabSignIn.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.transparent));
+        btnTabDoctor.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.transparent));
+        btnTabRegister.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.transparent));
+
+        if (mode == AuthMode.DOCTOR_SIGN_IN) {
+            btnTabDoctor.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.white));
+            layoutDoctorFields.setVisibility(View.VISIBLE);
+            layoutRegisterFields.setVisibility(View.GONE);
+            btnSubmitAuth.setText("Sign In to Physician Workstation (EHR)");
+            etEmail.setText("e.vance@careconnect.health");
+            etDoctorNpi.setText("NPI: 1849204912");
+            etDoctorDept.setText("Internal Medicine");
+        } else if (mode == AuthMode.PATIENT_REGISTER) {
             btnTabRegister.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.white));
-            btnTabRegister.setTextColor(ContextCompat.getColor(this, R.color.slate_900));
-            btnTabSignIn.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.transparent));
-            btnTabSignIn.setTextColor(ContextCompat.getColor(this, R.color.slate_600));
+            layoutDoctorFields.setVisibility(View.GONE);
             layoutRegisterFields.setVisibility(View.VISIBLE);
             btnSubmitAuth.setText("Create Encrypted Patient Account");
-            etEmail.setText("");
-            etPassword.setText("");
         } else {
             btnTabSignIn.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.white));
-            btnTabSignIn.setTextColor(ContextCompat.getColor(this, R.color.slate_900));
-            btnTabRegister.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.transparent));
-            btnTabRegister.setTextColor(ContextCompat.getColor(this, R.color.slate_600));
+            layoutDoctorFields.setVisibility(View.GONE);
             layoutRegisterFields.setVisibility(View.GONE);
             btnSubmitAuth.setText("Sign In to Patient Portal");
             etEmail.setText("maya.lin@patient.careconnect.health");
-            etPassword.setText("••••••••••••");
         }
     }
 
-    private void handleSignIn() {
+    private void handleDoctorSignIn() {
         String email = etEmail.getText().toString().trim();
-        User matched = null;
-        for (User u : ClinicRepository.getInstance().getDemoUsers()) {
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                matched = u;
-                break;
-            }
-        }
-        if (matched == null) matched = ClinicRepository.getInstance().getDemoUsers().get(0);
+        String npi = etDoctorNpi.getText().toString().trim();
+        User doc = ClinicRepository.getInstance().getDemoUsers().get(1); // Dr. Elena Vance
+        ClinicRepository.getInstance().logHipaaAction("DOCTOR_AUTH_SUCCESS", "AUTHENTICATION", doc.getId(),
+                "Physician authenticated with NPI: " + npi, doc.getName(), "N/A");
+        loginWithUser(doc);
+    }
+
+    private void handlePatientSignIn() {
+        String email = etEmail.getText().toString().trim();
+        User matched = ClinicRepository.getInstance().getDemoUsers().get(0);
         loginWithUser(matched);
     }
 
@@ -147,45 +165,16 @@ public class AuthActivity extends AppCompatActivity {
         String firstName = etFirstName.getText().toString().trim();
         String lastName = etLastName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
-        String dob = etDob.getText().toString().trim();
-        String bloodType = etBloodType.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Please enter your name and email address.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        int randMrn = 100000 + new Random().nextInt(900000);
-        String mrn = "MRN-" + randMrn;
-        String patientId = "p_" + System.currentTimeMillis();
-
-        Patient newPatient = new Patient(patientId, mrn, firstName, lastName,
-                dob.isEmpty() ? "1990-01-01" : dob, "Unspecified",
-                bloodType.isEmpty() ? "O+" : bloodType,
-                phone.isEmpty() ? "+1 (555) 000-0000" : phone, email);
-        newPatient.setBloodPressure("120/80 mmHg");
-        newPatient.setHeartRate(70);
-        newPatient.setOxygenSaturation(98);
-
-        ClinicRepository.getInstance().addPatient(newPatient);
-
-        User newUser = new User("usr_" + System.currentTimeMillis(),
-                firstName + " " + lastName, email, User.Role.PATIENT, "General Medicine", mrn, "Patient");
-        ClinicRepository.getInstance().getDemoUsers().add(newUser);
-
-        Toast.makeText(this, "Welcome! Assigned " + mrn, Toast.LENGTH_LONG).show();
-        loginWithUser(newUser);
+        String mrn = "MRN-" + (100000 + new Random().nextInt(900000));
+        Patient p = new Patient("p_" + System.currentTimeMillis(), mrn, firstName, lastName, "1990-01-01", "Unspecified", "O+", "+1 555-0199", email);
+        ClinicRepository.getInstance().addPatient(p);
+        User user = new User("usr_" + System.currentTimeMillis(), firstName + " " + lastName, email, User.Role.PATIENT, "General", mrn, "Patient");
+        loginWithUser(user);
     }
 
     private void loginWithUser(User user) {
         SessionManager.getInstance().setCurrentUser(user);
-        ClinicRepository.getInstance().logHipaaAction("LOGIN_SUCCESS", "AUTHENTICATION", user.getId(),
-                "User " + user.getName() + " logged in (" + user.getRole().name() + ")", user.getName(),
-                user.getMrn() != null ? user.getMrn() : "N/A");
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 }`

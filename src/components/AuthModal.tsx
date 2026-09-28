@@ -34,9 +34,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   currentUser,
   onUnlockSession,
 }) => {
-  const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
+  const [activeTab, setActiveTab] = useState<'patient' | 'doctor' | 'register'>('patient');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [doctorEmail, setDoctorEmail] = useState('e.vance@careconnect.health');
+  const [doctorPassword, setDoctorPassword] = useState('••••••••••••');
+  const [doctorNpi, setDoctorNpi] = useState('1849204912');
+  const [doctorDept, setDoctorDept] = useState('Internal Medicine');
   const [pin, setPin] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -90,6 +94,49 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     } else {
       setErrorMsg('Please enter a valid clinic email or select a quick demo account.');
     }
+  };
+
+  const handleDoctorLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg('');
+
+    let matchedDoc = DEMO_USERS.find(
+      (u) => u.role === 'doctor' && (u.email.toLowerCase() === doctorEmail.trim().toLowerCase() || doctorEmail.toLowerCase().includes('vance'))
+    );
+
+    if (!matchedDoc && doctorEmail.toLowerCase().includes('chen')) {
+      matchedDoc = {
+        id: 'usr_doc_marcus',
+        name: 'Dr. Marcus Chen, MD',
+        email: doctorEmail.trim(),
+        role: 'doctor',
+        avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=256',
+        title: 'Cardiology Specialist',
+        department: doctorDept,
+        phone: '+1 (555) 019-4822',
+      };
+    }
+
+    if (!matchedDoc) {
+      matchedDoc = DEMO_USERS.find((u) => u.role === 'doctor') || {
+        id: `usr_doc_${Date.now()}`,
+        name: doctorEmail.split('@')[0],
+        email: doctorEmail.trim(),
+        role: 'doctor',
+        avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=256',
+        title: 'Attending Physician',
+        department: doctorDept,
+        phone: '+1 (555) 019-3321',
+      };
+    }
+
+    setSuccessMsg(`Authenticated as ${matchedDoc.name} (${doctorDept}) · NPI: ${doctorNpi}`);
+    setTimeout(() => {
+      onLoginSuccess(matchedDoc!);
+      onClose();
+      setErrorMsg('');
+      setSuccessMsg('');
+    }, 400);
   };
 
   const handleQuickDemoLogin = (role: UserRole) => {
@@ -274,29 +321,45 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <div className="flex border-b border-slate-200 bg-slate-100/60 p-1">
           <button
             onClick={() => {
-              setActiveTab('signin');
+              setActiveTab('patient');
               setErrorMsg('');
             }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
-              activeTab === 'signin'
+            className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+              activeTab === 'patient'
                 ? 'bg-white text-slate-900 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Clinical & Patient Sign In
+            <UserIcon className="w-3.5 h-3.5" />
+            <span>Patient Sign In</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('doctor');
+              setErrorMsg('');
+            }}
+            className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+              activeTab === 'doctor'
+                ? 'bg-white text-teal-700 shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Stethoscope className="w-3.5 h-3.5 text-teal-600" />
+            <span>Doctor Login (MD)</span>
           </button>
           <button
             onClick={() => {
               setActiveTab('register');
               setErrorMsg('');
             }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+            className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
               activeTab === 'register'
                 ? 'bg-white text-slate-900 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Register as New Patient
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>New Patient</span>
           </button>
         </div>
 
@@ -315,7 +378,167 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           )}
 
-          {activeTab === 'signin' ? (
+          {activeTab === 'doctor' ? (
+            /* Dedicated Doctor / Physician Login */
+            <div className="space-y-4">
+              <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-teal-600 text-white flex items-center justify-center shrink-0">
+                  <Stethoscope className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-teal-950">
+                    Physician & Clinical Staff Terminal
+                  </h4>
+                  <p className="text-[11px] text-teal-700">
+                    Access Electronic Health Records (EHR), Patient Vitals & Prescribing Enclave
+                  </p>
+                </div>
+              </div>
+
+              {/* 1-Tap Physician Selectors */}
+              <div>
+                <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                  1-Tap Attending Physician Select:
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDoctorEmail('e.vance@careconnect.health');
+                      setDoctorNpi('1849204912');
+                      setDoctorDept('Internal Medicine');
+                      handleQuickDemoLogin('doctor');
+                    }}
+                    className="p-2.5 rounded-lg border border-teal-300 bg-teal-50/70 hover:bg-teal-100/70 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-teal-200 text-teal-800 flex items-center justify-center shrink-0 font-bold text-xs">
+                      EV
+                    </div>
+                    <div className="truncate">
+                      <p className="text-xs font-bold text-teal-950 truncate">Dr. Elena Vance</p>
+                      <p className="text-[10px] text-teal-700">Internal Medicine · NPI: 1849204912</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDoctorEmail('m.chen@careconnect.health');
+                      setDoctorNpi('1920394811');
+                      setDoctorDept('Cardiology');
+                      const marcusDoc: User = {
+                        id: 'usr_doc_marcus',
+                        name: 'Dr. Marcus Chen, MD',
+                        email: 'm.chen@careconnect.health',
+                        role: 'doctor',
+                        avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=256',
+                        title: 'Cardiology Specialist',
+                        department: 'Cardiology',
+                        phone: '+1 (555) 019-4822',
+                      };
+                      setSuccessMsg('Authenticated as Dr. Marcus Chen, MD (Cardiology)');
+                      setTimeout(() => {
+                        onLoginSuccess(marcusDoc);
+                        onClose();
+                      }, 300);
+                    }}
+                    className="p-2.5 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100/70 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center shrink-0 font-bold text-xs">
+                      MC
+                    </div>
+                    <div className="truncate">
+                      <p className="text-xs font-bold text-blue-950 truncate">Dr. Marcus Chen</p>
+                      <p className="text-[10px] text-blue-700">Cardiology Lead · NPI: 1920394811</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-200" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-white text-slate-400">or enter physician credentials</span>
+                </div>
+              </div>
+
+              <form onSubmit={handleDoctorLogin} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Physician Clinical Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={doctorEmail}
+                    onChange={(e) => setDoctorEmail(e.target.value)}
+                    placeholder="doctor@careconnect.health"
+                    className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      National Provider ID (NPI)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={doctorNpi}
+                      onChange={(e) => setDoctorNpi(e.target.value)}
+                      placeholder="1849204912"
+                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                      Department
+                    </label>
+                    <select
+                      value={doctorDept}
+                      onChange={(e) => setDoctorDept(e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white"
+                    >
+                      <option value="Internal Medicine">Internal Medicine</option>
+                      <option value="Cardiology">Cardiology</option>
+                      <option value="Emergency & Triage">Emergency & Triage</option>
+                      <option value="Pediatrics">Pediatrics</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Security Passkey / 2FA Token
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={doctorPassword}
+                    onChange={(e) => setDoctorPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  />
+                </div>
+
+                <div className="text-xs text-slate-500 flex items-center gap-1.5 pt-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Enforcing HIPAA § 164.312(a)(2)(iv) Hardware &amp; Biometric Security</span>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2.5 px-4 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors cursor-pointer mt-2 flex items-center justify-center gap-2"
+                >
+                  <Stethoscope className="w-4 h-4" />
+                  <span>Verify NPI &amp; Enter Physician EHR Terminal</span>
+                </button>
+              </form>
+            </div>
+          ) : activeTab === 'patient' ? (
             <div>
               {/* Quick Demo Role Selectors (Essential for evaluators) */}
               <div className="mb-5">
@@ -325,17 +548,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => handleQuickDemoLogin('doctor')}
-                    className="p-2.5 rounded-lg border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
+                    onClick={() => handleQuickDemoLogin('patient')}
+                    className="p-2.5 rounded-lg border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center shrink-0">
+                      <UserIcon className="w-4 h-4" />
+                    </div>
+                    <div className="truncate">
+                      <p className="text-xs font-bold text-slate-800 group-hover:text-emerald-700 truncate">
+                        Maya Lin
+                      </p>
+                      <p className="text-[10px] text-slate-500">Patient Portal · MRN-882194</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('doctor')}
+                    className="p-2.5 rounded-lg border border-teal-200 hover:border-teal-500 hover:bg-teal-50/50 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
                   >
                     <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
                       <Stethoscope className="w-4 h-4" />
                     </div>
                     <div className="truncate">
                       <p className="text-xs font-bold text-slate-800 group-hover:text-teal-700 truncate">
-                        Dr. Elena Vance
+                        Doctor Login (MD)
                       </p>
-                      <p className="text-[10px] text-slate-500">Attending Physician</p>
+                      <p className="text-[10px] text-slate-500">Switch to Doctor Portal</p>
                     </div>
                   </button>
 
@@ -349,7 +588,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </div>
                     <div className="truncate">
                       <p className="text-xs font-bold text-slate-800 group-hover:text-teal-700 truncate">
-                        Dr. Sterling
+                        David Sterling
                       </p>
                       <p className="text-[10px] text-slate-500">Admin & HIPAA Lead</p>
                     </div>
@@ -370,22 +609,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <p className="text-[10px] text-slate-500">Charge Triage Nurse</p>
                     </div>
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleQuickDemoLogin('patient')}
-                    className="p-2.5 rounded-lg border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 text-left transition-all cursor-pointer flex items-center gap-2.5 group"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                      <UserIcon className="w-4 h-4" />
-                    </div>
-                    <div className="truncate">
-                      <p className="text-xs font-bold text-slate-800 group-hover:text-teal-700 truncate">
-                        Maya Lin
-                      </p>
-                      <p className="text-[10px] text-slate-500">Patient Portal</p>
-                    </div>
-                  </button>
                 </div>
               </div>
 
@@ -401,13 +624,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <form onSubmit={handleSignIn} className="space-y-3">
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Clinical Email or Patient Portal ID
+                    Patient Email or Portal ID
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="doctor@careconnect.health or user@email.com"
+                    placeholder="user@patient.careconnect.health"
                     className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   />
                 </div>

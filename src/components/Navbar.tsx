@@ -11,7 +11,8 @@ import {
   Calendar,
   Users,
   MessageSquare,
-  FileText
+  FileText,
+  Stethoscope
 } from 'lucide-react';
 import { User, UserRole } from '../types/clinic';
 
@@ -254,12 +255,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </div>
           ) : (
-            <button
-              onClick={onOpenAuthModal}
-              className="px-4 py-2 text-xs font-semibold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors shadow-sm cursor-pointer whitespace-nowrap"
-            >
-              Sign In
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onOpenAuthModal}
+                className="px-3 py-1.5 text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition-colors shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+              >
+                <Stethoscope className="w-3.5 h-3.5 text-teal-600" />
+                <span>Doctor Login</span>
+              </button>
+              <button
+                onClick={onOpenAuthModal}
+                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors shadow-sm cursor-pointer whitespace-nowrap"
+              >
+                Patient Sign In
+              </button>
+            </div>
           )}
 
         </div>

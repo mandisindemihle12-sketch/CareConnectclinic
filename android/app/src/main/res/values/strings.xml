@@ -9,8 +9,11 @@
     <string name="title_hipaa">HIPAA</string>
     
     <!-- Auth Strings -->
-    <string name="sign_in">Sign In</string>
+    <string name="sign_in">Patient Login</string>
+    <string name="doctor_sign_in">Doctor Login</string>
     <string name="register">Register as Patient</string>
+    <string name="doctor_npi">Medical License / NPI #</string>
+    <string name="doctor_dept">Department (e.g. Internal Medicine)</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="dob">Date of Birth</string>

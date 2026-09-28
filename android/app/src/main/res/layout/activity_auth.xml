@@ -65,7 +65,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Toggle Sign In vs Register -->
+        <!-- Segmented 3-Tab Selector: Patient vs Doctor vs Register -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="46dp"
@@ -80,9 +80,22 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@color/white"
-                android:text="Patient Sign In"
+                android:text="Patient"
                 android:textColor="@color/slate_900"
-                android:textSize="13sp"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:cornerRadius="6dp"
+                app:elevation="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_tab_doctor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:backgroundTint="@android:color/transparent"
+                android:text="Doctor (MD)"
+                android:textColor="@color/slate_600"
+                android:textSize="12sp"
                 android:textAllCaps="false"
                 app:cornerRadius="6dp"
                 app:elevation="0dp" />
@@ -93,9 +106,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:text="New Patient Register"
+                android:text="Register"
                 android:textColor="@color/slate_600"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textAllCaps="false"
                 app:cornerRadius="6dp"
                 app:elevation="0dp" />
@@ -116,6 +129,60 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp">
+
+                <!-- Doctor / Physician Specific Credentials -->
+                <LinearLayout
+                    android:id="@+id/layout_doctor_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_badge_teal"
+                        android:padding="10dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_person"
+                            app:tint="@color/teal_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Physician Enclave &amp; EHR Access"
+                            android:textSize="12sp"
+                            android:textColor="@color/teal_dark"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_doctor_npi"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_input"
+                        android:hint="National Provider Identifier (NPI # e.g. 1849204912)"
+                        android:paddingHorizontal="14dp"
+                        android:textSize="13sp" />
+
+                    <EditText
+                        android:id="@+id/et_doctor_dept"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_input"
+                        android:hint="Clinical Department (e.g. Internal Medicine, Cardiology)"
+                        android:paddingHorizontal="14dp"
+                        android:textSize="13sp" />
+                </LinearLayout>
 
                 <!-- Registration Only Fields -->
                 <LinearLayout

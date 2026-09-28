@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">CareConnect Clinic</string>
+    <string name="hipaa_subtitle">HIPAA Security Rule § 164.312 Certified</string>
+    <string name="title_portal">My Care</string>
+    <string name="title_flow">Flow</string>
+    <string name="title_records">EHR</string>
+    <string name="title_scheduler">Visits</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_hipaa">HIPAA</string>
+    
+    <!-- Auth Strings -->
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register as Patient</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="dob">Date of Birth</string>
+    <string name="blood_type">Blood Type</string>
+    <string name="phone">Mobile Phone (for SMS Reminders)</string>
+    <string name="email">Email Address</string>
+    <string name="password">Security Password</string>
+    <string name="hipaa_consent">I acknowledge and consent to the HIPAA Notice of Privacy Practices (45 CFR § 164.520).</string>
+    
+    <!-- Actions -->
+    <string name="book_appointment">Book Appointment</string>
+    <string name="confirm_attendance">Confirm Attendance</string>
+    <string name="self_check_in">Self Check-In</string>
+    <string name="record_vitals">Record Vitals</string>
+    <string name="break_glass">Break-Glass Access</string>
+</resources>

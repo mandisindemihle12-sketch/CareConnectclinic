@@ -38,6 +38,7 @@ import { AppointmentScheduler } from './components/AppointmentScheduler';
 import { EncryptedConsultations } from './components/EncryptedConsultations';
 import { HipaaComplianceCenter } from './components/HipaaComplianceCenter';
 import { AndroidFrameSimulator } from './components/AndroidFrameSimulator';
+import { AndroidCodeViewer } from './components/AndroidCodeViewer';
 import { ShieldCheck, Lock, Activity, Users, Calendar, MessageSquare } from 'lucide-react';
 
 export default function App() {
@@ -420,6 +421,8 @@ export default function App() {
             onExportAuditLog={handleExportAuditTrail}
           />
         );
+      case 'android_code':
+        return <AndroidCodeViewer />;
       default:
         return currentUser.role === 'patient' ? (
           <PatientPortal

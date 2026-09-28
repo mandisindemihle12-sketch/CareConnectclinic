@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/slate_50"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HIPAA Security Rule § 164.312 Center"
+        android:textSize="18sp"
+        android:textColor="@color/slate_900"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Immutable cryptographic PHI access trail &amp; compliance status"
+        android:textSize="12sp"
+        android:textColor="@color/slate_500"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Technical Safeguard Badges -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/slate_200"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Technical Safeguards"
+                android:textSize="13sp"
+                android:textColor="@color/slate_800"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="✓ § 164.312(a)(1) Role-Based Access Control (RBAC)\n✓ § 164.312(a)(2)(iv) AES-256 GCM Authenticated Encryption\n✓ § 164.312(b) SHA-256 Tamper-Proof Audit Controls\n✓ § 164.312(a)(2)(ii) Emergency Break-Glass Override Enforced"
+                android:textSize="11sp"
+                android:textColor="@color/emerald_600" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Live Audit Trail (SHA-256 Verified)"
+            android:textSize="14sp"
+            android:textColor="@color/slate_900"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_total_logs_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 Events"
+            android:textSize="11sp"
+            android:textColor="@color/teal_primary"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_audit_logs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

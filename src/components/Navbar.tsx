@@ -59,6 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'scheduler', label: 'Clinic Calendar', icon: Calendar, roles: ['admin', 'doctor', 'nurse'] },
     { id: 'consultations', label: 'Encrypted Chat', icon: MessageSquare, roles: ['admin', 'doctor', 'nurse', 'patient'], badge: unreadCount },
     { id: 'hipaa', label: 'HIPAA Vault', icon: ShieldCheck, roles: ['admin', 'doctor', 'nurse'] },
+    { id: 'android_code', label: 'Android Java Source', icon: FileText, roles: ['admin', 'doctor', 'nurse', 'patient'] },
   ];
 
   const visibleLinks = navLinks.filter(

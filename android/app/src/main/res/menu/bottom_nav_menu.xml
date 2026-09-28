@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_portal"
+        android:icon="@drawable/ic_calendar"
+        android:title="My Care" />
+    <item
+        android:id="@+id/nav_records"
+        android:icon="@drawable/ic_person"
+        android:title="EHR" />
+    <item
+        android:id="@+id/nav_flow"
+        android:icon="@drawable/ic_clock"
+        android:title="Flow" />
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="Consults" />
+    <item
+        android:id="@+id/nav_hipaa"
+        android:icon="@drawable/ic_shield"
+        android:title="HIPAA" />
+</menu>

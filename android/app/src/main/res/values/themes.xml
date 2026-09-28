@@ -1,0 +1,21 @@
+<resources>
+    <!-- Base application theme with Material 3 styling -->
+    <style name="Theme.CareConnect" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/teal_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/teal_light</item>
+        <item name="colorOnPrimaryContainer">@color/teal_dark</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">@color/slate_50</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/slate_900</item>
+
+        <!-- Status bar and navigation bar color -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

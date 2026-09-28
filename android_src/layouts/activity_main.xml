@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/slate_50">
+
+    <!-- Top Clinical App Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:paddingHorizontal="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:elevation="2dp">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_shield"
+            app:tint="@color/teal_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CareConnect"
+                android:textSize="17sp"
+                android:textColor="@color/slate_900"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_active_user_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Patient: Maya Lin (MRN-882194)"
+                android:textSize="11sp"
+                android:textColor="@color/teal_primary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Privacy Shield Mask Toggle -->
+        <ImageButton
+            android:id="@+id/btn_toggle_privacy_mask"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_shield"
+            android:tooltipText="Toggle PHI Privacy Mask"
+            app:tint="@color/slate_600" />
+
+        <!-- HIPAA Lock Screen Button -->
+        <ImageButton
+            android:id="@+id/btn_lock_session"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_lock"
+            android:tooltipText="Lock Clinical Session"
+            app:tint="@color/slate_600" />
+    </LinearLayout>
+
+    <!-- Main Fragment Container -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="8dp"
+        app:itemIconTint="@color/teal_primary"
+        app:itemTextColor="@color/teal_primary"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
+</LinearLayout>

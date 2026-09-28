@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚨"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Emergency Break-Glass Access"
+            android:textSize="17sp"
+            android:textColor="@color/rose_600"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Under HIPAA 45 CFR § 164.312(a)(2)(ii), emergency access overrides clinical confidentiality restrictions. This action generates a high-priority tamper-proof audit event."
+        android:textSize="12sp"
+        android:textColor="@color/slate_600" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Mandatory Clinical Justification:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_800"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_break_glass_reason"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_input"
+        android:gravity="top|start"
+        android:hint="State medical emergency justification (e.g. Unconscious patient, critical trauma vitals)..."
+        android:padding="10dp"
+        android:textSize="13sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirm_break_glass"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/rose_600"
+        android:text="Authorize Emergency Override"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        app:cornerRadius="8dp" />
+</LinearLayout>

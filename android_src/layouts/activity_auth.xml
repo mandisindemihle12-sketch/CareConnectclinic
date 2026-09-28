@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/slate_50">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header / Branding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_shield"
+                    app:tint="@color/teal_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="CareConnect"
+                    android:textSize="26sp"
+                    android:textColor="@color/slate_900"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Clinical Portal &amp; Patient Records Enclave"
+                android:textSize="13sp"
+                android:textColor="@color/slate_600" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_badge_emerald"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="🔒 HIPAA Security Rule § 164.312 Certified"
+                android:textSize="11sp"
+                android:textColor="@color/emerald_600"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Toggle Sign In vs Register -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:orientation="horizontal"
+            android:background="@color/slate_200"
+            android:padding="3dp"
+            android:layout_marginBottom="20dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_tab_signin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:text="Patient Sign In"
+                android:textColor="@color/slate_900"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:cornerRadius="6dp"
+                app:elevation="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_tab_register"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="New Patient Register"
+                android:textColor="@color/slate_600"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:cornerRadius="6dp"
+                app:elevation="0dp" />
+        </LinearLayout>
+
+        <!-- Card Container -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/slate_200"
+            app:strokeWidth="1dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Registration Only Fields -->
+                <LinearLayout
+                    android:id="@+id/layout_register_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_first_name"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_input"
+                            android:hint="First Name"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/et_last_name"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_input"
+                            android:hint="Last Name"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp">
+
+                        <EditText
+                            android:id="@+id/et_dob"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_input"
+                            android:hint="DOB (YYYY-MM-DD)"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/et_blood_type"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_input"
+                            android:hint="Blood Type (e.g. O+)"
+                            android:paddingHorizontal="14dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_input"
+                        android:hint="Mobile Phone (for SMS Reminders)"
+                        android:inputType="phone"
+                        android:paddingHorizontal="14dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- Common Auth Fields -->
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="Email Address"
+                    android:inputType="textEmailAddress"
+                    android:paddingHorizontal="14dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="Password (AES encrypted)"
+                    android:inputType="textPassword"
+                    android:paddingHorizontal="14dp"
+                    android:textSize="14sp" />
+
+                <CheckBox
+                    android:id="@+id/cb_hipaa_consent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="I acknowledge the HIPAA Notice of Privacy Practices (45 CFR § 164.520)"
+                    android:textSize="12sp"
+                    android:textColor="@color/slate_600"
+                    android:checked="true" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_submit_auth"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/teal_primary"
+                    android:text="Sign In to Patient Portal"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:cornerRadius="10dp" />
+
+                <!-- Quick Demo Login Presets -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@color/slate_200" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Or Instant 1-Tap Demo Roles:"
+                    android:textSize="12sp"
+                    android:textColor="@color/slate_500"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_demo_patient"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:backgroundTint="@color/teal_surface"
+                        android:text="Maya (Patient)"
+                        android:textColor="@color/teal_dark"
+                        android:textSize="11sp"
+                        android:textAllCaps="false"
+                        app:strokeColor="@color/teal_primary"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="6dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_demo_doctor"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:backgroundTint="@color/blue_50"
+                        android:text="Dr. Vance (MD)"
+                        android:textColor="@color/blue_600"
+                        android:textSize="11sp"
+                        android:textAllCaps="false"
+                        app:strokeColor="@color/blue_600"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="6dp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_demo_admin"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/slate_100"
+                    android:text="David Sterling (Admin / Operations)"
+                    android:textColor="@color/slate_700"
+                    android:textSize="11sp"
+                    android:textAllCaps="false"
+                    app:strokeColor="@color/slate_300"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="6dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Book New Clinical Appointment"
+        android:textSize="18sp"
+        android:textColor="@color/slate_900"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Select physician, slot, and reason for consultation."
+        android:textSize="12sp"
+        android:textColor="@color/slate_500" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Select Attending Provider:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_700"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/sp_doctor"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_input"
+        android:paddingHorizontal="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Date of Visit:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_700"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_appointment_date"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_input"
+        android:hint="Tomorrow, Oct 02, 2026"
+        android:paddingHorizontal="14dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Time Slot:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_700"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rg_time_slots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_slot_morning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="09:30 AM"
+            android:checked="true"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_slot_afternoon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="02:00 PM"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_slot_evening"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="04:30 PM"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Consultation Modality:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_700"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rg_visit_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_in_person"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="In-Person Clinic"
+            android:checked="true"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_telehealth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Secure Telehealth"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Reason for Visit / Symptoms:"
+        android:textSize="12sp"
+        android:textColor="@color/slate_700"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_reason"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_input"
+        android:hint="E.g., Routine checkup, medication renewal, chest pain..."
+        android:paddingHorizontal="14dp"
+        android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirm_booking"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="18dp"
+        android:backgroundTint="@color/teal_primary"
+        android:text="Confirm &amp; Encrypt Appointment"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        app:cornerRadius="8dp" />
+</LinearLayout>

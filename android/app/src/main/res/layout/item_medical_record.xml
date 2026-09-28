@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/slate_200"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_record_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Comprehensive Consultation"
+                android:textSize="12sp"
+                android:textColor="@color/teal_primary"
+                android:textStyle="bold"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/tv_record_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2026-08-15"
+                android:textSize="12sp"
+                android:textColor="@color/slate_500" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_diagnosis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Essential Primary Hypertension (ICD-10 I10)"
+            android:textSize="15sp"
+            android:textColor="@color/slate_900"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_provider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Provider: Dr. Elena Vance, MD (Internal Medicine)"
+            android:textSize="12sp"
+            android:textColor="@color/slate_600" />
+
+        <TextView
+            android:id="@+id/tv_soap_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/slate_50"
+            android:padding="10dp"
+            android:text="S: Patient reports good medication compliance...\nO: BP 118/76, HR 72..."
+            android:textSize="12sp"
+            android:textColor="@color/slate_700" />
+
+        <TextView
+            android:id="@+id/tv_prescriptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Rx: Lisinopril 10mg - 1 tab PO daily"
+            android:textSize="12sp"
+            android:textColor="@color/teal_dark"
+            android:textStyle="bold" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

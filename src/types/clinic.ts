@@ -157,6 +157,25 @@ export interface EncryptedMessage {
   attachedType?: 'lab_result' | 'vital_alert' | 'prescription_request';
 }
 
+export interface AppointmentReminder {
+  id: string;
+  appointmentId: string;
+  patientId: string;
+  patientMrn: string;
+  doctorName: string;
+  specialty: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  type: 'in-person' | 'telehealth';
+  room?: string;
+  title: string;
+  instructions: string[];
+  acknowledged: boolean;
+  smsSent: boolean;
+  emailSent: boolean;
+  scheduledSendHoursBefore: number;
+}
+
 export interface HipaaAuditLog {
   id: string;
   timestamp: string;

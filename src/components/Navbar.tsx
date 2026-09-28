@@ -53,9 +53,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const navLinks = [
-    { id: 'dashboard', label: 'Dashboard', icon: Activity, roles: ['admin', 'doctor', 'nurse'] },
-    { id: 'patients', label: 'Patient Records', icon: Users, roles: ['admin', 'doctor', 'nurse', 'patient'] },
-    { id: 'scheduler', label: 'Appointments', icon: Calendar, roles: ['admin', 'doctor', 'nurse', 'patient'] },
+    { id: 'portal', label: currentUser?.role === 'patient' ? 'My Care Portal' : 'Patient View', icon: UserIcon, roles: ['admin', 'doctor', 'nurse', 'patient'] },
+    { id: 'dashboard', label: 'Operations & Flow', icon: Activity, roles: ['admin', 'doctor', 'nurse'] },
+    { id: 'patients', label: 'EHR Records', icon: Users, roles: ['admin', 'doctor', 'nurse'] },
+    { id: 'scheduler', label: 'Clinic Calendar', icon: Calendar, roles: ['admin', 'doctor', 'nurse'] },
     { id: 'consultations', label: 'Encrypted Chat', icon: MessageSquare, roles: ['admin', 'doctor', 'nurse', 'patient'], badge: unreadCount },
     { id: 'hipaa', label: 'HIPAA Vault', icon: ShieldCheck, roles: ['admin', 'doctor', 'nurse'] },
   ];
@@ -71,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 1: Single text element wordmark */}
         <div className="flex items-center gap-2 shrink-0">
           <button 
-            onClick={() => setActiveTab('dashboard')} 
+            onClick={() => setActiveTab(currentUser?.role === 'patient' ? 'portal' : 'dashboard')} 
             className="flex items-center gap-2 group text-left cursor-pointer"
           >
             <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white font-bold text-base shadow-sm">

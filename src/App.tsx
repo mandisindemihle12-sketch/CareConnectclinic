@@ -14,7 +14,8 @@ import {
   EncryptedMessage, 
   HipaaAuditLog, 
   PatientStatus, 
-  DoctorStatus 
+  DoctorStatus,
+  AppointmentReminder
 } from './types/clinic';
 import { 
   DEMO_USERS, 
@@ -23,11 +24,14 @@ import {
   INITIAL_APPOINTMENTS, 
   INITIAL_ENCRYPTED_MESSAGES, 
   INITIAL_AUDIT_LOGS,
+  INITIAL_REMINDERS,
   CLINIC_HERO_IMAGE
 } from './data/mockData';
 import { generateAuditChecksum } from './utils/crypto';
 import { Navbar } from './components/Navbar';
 import { AuthModal } from './components/AuthModal';
+import { AuthLanding } from './components/AuthLanding';
+import { PatientPortal } from './components/PatientPortal';
 import { AdminDashboard } from './components/AdminDashboard';
 import { PatientRecords } from './components/PatientRecords';
 import { AppointmentScheduler } from './components/AppointmentScheduler';
@@ -37,9 +41,9 @@ import { AndroidFrameSimulator } from './components/AndroidFrameSimulator';
 import { ShieldCheck, Lock, Activity, Users, Calendar, MessageSquare } from 'lucide-react';
 
 export default function App() {
-  // Session & Authentication State
-  const [currentUser, setCurrentUser] = useState<User | null>(DEMO_USERS[1]); // Default to Dr. Elena Vance
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  // Session & Authentication State - Starts with registration & login (null user)
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('portal');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isLockScreen, setIsLockScreen] = useState<boolean>(false);
   const [lockCountdown, setLockCountdown] = useState<number>(900); // 15 mins (HIPAA rule)
@@ -50,13 +54,14 @@ export default function App() {
   const [patients, setPatients] = useState<Patient[]>(INITIAL_PATIENTS);
   const [doctors, setDoctors] = useState<DoctorAvailability[]>(INITIAL_DOCTOR_AVAILABILITY);
   const [appointments, setAppointments] = useState<Appointment[]>(INITIAL_APPOINTMENTS);
+  const [reminders, setReminders] = useState<AppointmentReminder[]>(INITIAL_REMINDERS);
   const [messages, setMessages] = useState<EncryptedMessage[]>(INITIAL_ENCRYPTED_MESSAGES);
   const [auditLogs, setAuditLogs] = useState<HipaaAuditLog[]>(INITIAL_AUDIT_LOGS);
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(INITIAL_PATIENTS[0]);
 
   // HIPAA Inactivity Timer (Automatic Logoff under 45 CFR § 164.312(a)(2)(iii))
   useEffect(() => {
-    if (isLockScreen) return;
+    if (isLockScreen || !currentUser) return;
 
     const timer = setInterval(() => {
       setLockCountdown((prev) => {
@@ -69,14 +74,14 @@ export default function App() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isLockScreen]);
+  }, [isLockScreen, currentUser]);
 
   // Reset timer on user mouse/key activity
   const resetInactivityTimer = useCallback(() => {
-    if (!isLockScreen) {
+    if (!isLockScreen && currentUser) {
       setLockCountdown(900);
     }
-  }, [isLockScreen]);
+  }, [isLockScreen, currentUser]);
 
   useEffect(() => {
     window.addEventListener('mousemove', resetInactivityTimer);
@@ -125,6 +130,24 @@ export default function App() {
     setAuditLogs((prev) => [newLog, ...prev]);
   };
 
+  // Login handler
+  const handleLoginSuccess = (user: User) => {
+    setCurrentUser(user);
+    setLockCountdown(900);
+    setIsLockScreen(false);
+    setIsAuthModalOpen(false);
+
+    if (user.role === 'patient') {
+      setActiveTab('portal');
+      const pat = patients.find((p) => p.mrn === user.mrn) || patients[0];
+      setSelectedPatient(pat);
+    } else {
+      setActiveTab('dashboard');
+    }
+
+    logAudit('LOGIN', `User ${user.name} logged in with role: ${user.role.toUpperCase()}`, user.mrn, user.name);
+  };
+
   // Switch active role (for demonstration & RBAC evaluation)
   const handleSwitchUser = (role: UserRole) => {
     const target = DEMO_USERS.find((u) => u.role === role);
@@ -132,9 +155,11 @@ export default function App() {
       setCurrentUser(target);
       logAudit('LOGIN', `Role switched to ${target.name} (${role.toUpperCase()})`);
       if (role === 'patient') {
-        setActiveTab('patients');
-        const pat = patients.find((p) => p.mrn === target.mrn);
-        if (pat) setSelectedPatient(pat);
+        setActiveTab('portal');
+        const pat = patients.find((p) => p.mrn === target.mrn) || patients[0];
+        setSelectedPatient(pat);
+      } else {
+        setActiveTab('dashboard');
       }
     }
   };
@@ -171,14 +196,84 @@ export default function App() {
 
   const handleAddPatient = (newPat: Patient) => {
     setPatients((prev) => [newPat, ...prev]);
+    setSelectedPatient(newPat);
+  };
+
+  const handleRegisterPatient = (newPat: any) => {
+    const fullPatient: Patient = {
+      ...newPat,
+      vitalsHistory: [
+        {
+          id: `vit_${Date.now()}`,
+          timestamp: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
+          bloodPressure: '120/80',
+          heartRate: 72,
+          spO2: 99,
+          temperature: 98.6,
+          respiratoryRate: 16,
+          recordedBy: 'Self-Enrolled Intake',
+        },
+      ],
+      soapNotes: [],
+      documents: [],
+      conditions: ['New Patient Intake'],
+      allergies: ['Pending Clinical Triage'],
+      medications: [],
+      currentStatus: 'waiting_room',
+      assignedDoctorId: 'usr_doc_elena',
+      assignedDoctorName: 'Dr. Elena Vance, MD',
+      triagePriority: 'Routine',
+      lastVisitDate: new Date().toISOString().split('T')[0],
+    };
+
+    setPatients((prev) => [fullPatient, ...prev]);
+    setSelectedPatient(fullPatient);
+    setActiveTab('portal');
   };
 
   const handleUpdatePatient = (updatedPat: Patient) => {
     setPatients((prev) => prev.map((p) => (p.id === updatedPat.id ? updatedPat : p)));
+    if (selectedPatient?.id === updatedPat.id) {
+      setSelectedPatient(updatedPat);
+    }
   };
 
   const handleBookAppointment = (newApt: Appointment) => {
     setAppointments((prev) => [newApt, ...prev]);
+
+    // Automatically trigger and provision encrypted appointment reminder
+    const newReminder: AppointmentReminder = {
+      id: `rem_${Date.now()}`,
+      appointmentId: newApt.id,
+      patientId: newApt.patientId,
+      patientMrn: newApt.patientMrn,
+      doctorName: newApt.doctorName,
+      specialty: newApt.specialty,
+      appointmentDate: newApt.date,
+      appointmentTime: newApt.timeSlot,
+      type: newApt.type,
+      room: newApt.room,
+      title: `Upcoming ${newApt.type === 'telehealth' ? 'Telehealth' : 'Clinic'} Consultation with ${newApt.doctorName}`,
+      instructions: [
+        newApt.type === 'telehealth' 
+          ? 'Ensure a quiet private room and test your camera & audio 5 minutes before joining.'
+          : 'Please check in at the front desk 15 minutes before your scheduled appointment.',
+        'Have your insurance ID and any updated medications list prepared.',
+      ],
+      acknowledged: false,
+      smsSent: true,
+      emailSent: true,
+      scheduledSendHoursBefore: 24,
+    };
+
+    setReminders((prev) => [newReminder, ...prev]);
+  };
+
+  const handleAcknowledgeReminder = (reminderId: string) => {
+    setReminders((prev) =>
+      prev.map((r) => (r.id === reminderId ? { ...r, acknowledged: true } : r))
+    );
+    logAudit('STATUS_CHANGE', `Patient acknowledged appointment reminder ${reminderId}`);
   };
 
   const handleUpdateAppointmentStatus = (
@@ -229,9 +324,39 @@ export default function App() {
     logAudit('EXPORT_RECORD', 'Exported immutable HIPAA compliance audit ledger');
   };
 
+  // Find active patient record for patient portal
+  const activePatientRecord = currentUser?.role === 'patient'
+    ? (patients.find((p) => p.mrn === currentUser.mrn) || selectedPatient || patients[0])
+    : (selectedPatient || patients[0]);
+
   // Content Renderer
   const renderTabContent = () => {
+    if (!currentUser) {
+      return (
+        <AuthLanding
+          onLoginSuccess={handleLoginSuccess}
+          onRegisterPatient={handleRegisterPatient}
+        />
+      );
+    }
+
     switch (activeTab) {
+      case 'portal':
+        return (
+          <PatientPortal
+            currentUser={currentUser}
+            patientRecord={activePatientRecord}
+            appointments={appointments}
+            doctors={doctors}
+            reminders={reminders}
+            isPrivacyMasked={isPrivacyMasked}
+            onBookAppointment={handleBookAppointment}
+            onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
+            onAcknowledgeReminder={handleAcknowledgeReminder}
+            onNavigateToTab={setActiveTab}
+            onLogAudit={logAudit}
+          />
+        );
       case 'dashboard':
         return (
           <AdminDashboard
@@ -296,7 +421,21 @@ export default function App() {
           />
         );
       default:
-        return (
+        return currentUser.role === 'patient' ? (
+          <PatientPortal
+            currentUser={currentUser}
+            patientRecord={activePatientRecord}
+            appointments={appointments}
+            doctors={doctors}
+            reminders={reminders}
+            isPrivacyMasked={isPrivacyMasked}
+            onBookAppointment={handleBookAppointment}
+            onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
+            onAcknowledgeReminder={handleAcknowledgeReminder}
+            onNavigateToTab={setActiveTab}
+            onLogAudit={logAudit}
+          />
+        ) : (
           <AdminDashboard
             patients={patients}
             doctors={doctors}
@@ -329,9 +468,11 @@ export default function App() {
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onSwitchUser={handleSwitchUser}
         onLogout={() => {
-          logAudit('LOGOUT', `Signed out user session for ${currentUser?.name}`);
+          if (currentUser) {
+            logAudit('LOGOUT', `Signed out user session for ${currentUser.name}`);
+          }
           setCurrentUser(null);
-          setIsAuthModalOpen(true);
+          setActiveTab('portal');
         }}
         unreadCount={messages.filter((m) => m.status === 'delivered').length}
       />
@@ -379,29 +520,8 @@ export default function App() {
           setIsAuthModalOpen(false);
           if (isLockScreen) setIsLockScreen(false);
         }}
-        onLoginSuccess={(user) => {
-          setCurrentUser(user);
-          setIsAuthModalOpen(false);
-          setIsLockScreen(false);
-          setLockCountdown(900);
-          logAudit('LOGIN', `Authenticated user ${user.name} (${user.role.toUpperCase()})`);
-        }}
-        onRegisterPatient={(newPat) => {
-          handleAddPatient({
-            ...newPat,
-            vitalsHistory: [],
-            soapNotes: [],
-            documents: [],
-            conditions: ['New Patient Intake'],
-            allergies: ['Pending Clinical Triage'],
-            medications: [],
-            currentStatus: 'waiting_room',
-            assignedDoctorId: 'usr_doc_elena',
-            assignedDoctorName: 'Dr. Elena Vance, MD',
-            triagePriority: 'Routine',
-            lastVisitDate: new Date().toISOString().split('T')[0],
-          });
-        }}
+        onLoginSuccess={handleLoginSuccess}
+        onRegisterPatient={handleRegisterPatient}
         isLockScreenMode={isLockScreen}
         currentUser={currentUser}
         onUnlockSession={() => {

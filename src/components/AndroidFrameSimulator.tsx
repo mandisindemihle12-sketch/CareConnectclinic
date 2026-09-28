@@ -35,13 +35,20 @@ export const AndroidFrameSimulator: React.FC<AndroidFrameSimulatorProps> = ({
 }) => {
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
-  const navItems = [
-    { id: 'dashboard', label: 'Flow', icon: Activity },
-    { id: 'patients', label: 'EHR', icon: Users },
-    { id: 'scheduler', label: 'Visits', icon: Calendar },
-    { id: 'consultations', label: 'Chat', icon: MessageSquare, badge: unreadCount },
-    { id: 'hipaa', label: 'HIPAA', icon: ShieldCheck },
-  ];
+  const navItems = currentUser?.role === 'patient'
+    ? [
+        { id: 'portal', label: 'My Care', icon: Activity },
+        { id: 'consultations', label: 'Chat', icon: MessageSquare, badge: unreadCount },
+        { id: 'dashboard', label: 'Clinic', icon: Users },
+      ]
+    : [
+        { id: 'portal', label: 'Portal', icon: Activity },
+        { id: 'dashboard', label: 'Flow', icon: Users },
+        { id: 'patients', label: 'EHR', icon: Activity },
+        { id: 'scheduler', label: 'Visits', icon: Calendar },
+        { id: 'consultations', label: 'Chat', icon: MessageSquare, badge: unreadCount },
+        { id: 'hipaa', label: 'HIPAA', icon: ShieldCheck },
+      ];
 
   return (
     <div className="min-h-screen bg-slate-900 py-6 px-2 flex flex-col items-center justify-center">

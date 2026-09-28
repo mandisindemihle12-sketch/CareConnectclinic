@@ -5,6 +5,7 @@ import {
   DoctorAvailability,
   EncryptedMessage,
   HipaaAuditLog,
+  AppointmentReminder,
 } from '../types/clinic';
 
 // Real local asset paths generated via generate_image
@@ -704,3 +705,50 @@ export const INITIAL_AUDIT_LOGS: HipaaAuditLog[] = [
     encryptionChecksum: 'B5891340CDAE2298',
   },
 ];
+
+export const INITIAL_REMINDERS: AppointmentReminder[] = [
+  {
+    id: 'rem_1',
+    appointmentId: 'apt_101',
+    patientId: 'pat_1',
+    patientMrn: 'MRN-84920',
+    doctorName: 'Dr. Elena Vance, MD',
+    specialty: 'Internal Medicine',
+    appointmentDate: '2026-09-28',
+    appointmentTime: '09:00 AM',
+    type: 'in-person',
+    room: 'Exam Room 1',
+    title: 'Upcoming Visit: Hypertension & Medication Review',
+    instructions: [
+      'Please arrive 15 minutes before your scheduled slot for baseline vitals check.',
+      'Bring all current prescription bottles or medication containers with you.',
+      'Fast for 8 hours if you plan to complete routine comprehensive metabolic lab work today.',
+    ],
+    acknowledged: false,
+    smsSent: true,
+    emailSent: true,
+    scheduledSendHoursBefore: 2,
+  },
+  {
+    id: 'rem_2',
+    appointmentId: 'apt_103',
+    patientId: 'pat_3',
+    patientMrn: 'MRN-91032',
+    doctorName: 'Dr. Elena Vance, MD',
+    specialty: 'Internal Medicine',
+    appointmentDate: '2026-09-28',
+    appointmentTime: '11:30 AM',
+    type: 'in-person',
+    room: 'Diagnostics Suite',
+    title: 'Post-Lab Review: Ferritin & Iron Saturation',
+    instructions: [
+      'Hydrate well with 16oz of water prior to your diagnostic blood draw.',
+      'Review any symptoms of fatigue or dizziness with triage nurse upon check-in.',
+    ],
+    acknowledged: true,
+    smsSent: true,
+    emailSent: true,
+    scheduledSendHoursBefore: 24,
+  },
+];
+
